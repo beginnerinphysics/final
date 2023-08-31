@@ -3,7 +3,8 @@ module DATA_LATCH#(parameter STAGE = 8, parameter DWIDTH = 8)(
     input rst,
     input start,
     input  [DWIDTH-1:0] data,
-    output reg [DWIDTH-1:0] data_q[0:STAGE-1]
+    output reg [DWIDTH-1:0] data_q[0:STAGE-1],
+    output shregforclk
     /*
     output [DWIDTH-1:0] data_q1,
     output [DWIDTH-1:0] data_q2,
@@ -18,6 +19,7 @@ module DATA_LATCH#(parameter STAGE = 8, parameter DWIDTH = 8)(
 
 reg [STAGE : 0] shreg;
 reg [DWIDTH-1:0] data_in[0:STAGE-1];
+assign shregforclk = shreg[STAGE];
 always@(posedge clk or posedge rst)begin
     if(rst)begin
         shreg <= 'b0;
