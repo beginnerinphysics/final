@@ -16,10 +16,8 @@ module DATA_LATCH#(parameter STAGE = 8, parameter DWIDTH = 8)(
     output [DWIDTH-1:0] data_q8
     */
 );
-
 reg [STAGE : 0] shreg;
 reg [DWIDTH-1:0] data_in[0:STAGE-1];
-assign shregforclk = shreg[STAGE];
 always@(posedge clk or posedge rst)begin
     if(rst)begin
         shreg <= 'b0;
@@ -28,7 +26,7 @@ always@(posedge clk or posedge rst)begin
         shreg <= {shreg[STAGE-1:0],start};
     end
 end
-
+assign shregforclk = shreg[STAGE];
 genvar i;
 generate
     for(i=0;i<STAGE;i=i+1)begin: DATA_SHIFT
