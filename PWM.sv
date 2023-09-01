@@ -3,7 +3,8 @@
 `include "./PWMblock.sv"
 module PWM #(parameter DWIDTH = 8, parameter STAGE = 8)(
 
-    input clk,
+    input clkfordata,
+    input clkforcounter,
     input rst,
     input start,
     input [DWIDTH - 1 : 0] data,
@@ -11,11 +12,11 @@ module PWM #(parameter DWIDTH = 8, parameter STAGE = 8)(
 //    input hsync,//singal from shreg[8]
     output reg [STAGE - 1 : 0] out
 );
-reg [DWIDTH - 1 : 0]count;
+wire [DWIDTH - 1 : 0]count;
 wire hsync;
 wire [DWIDTH - 1 : 0] data_q [0 : STAGE -1];
-DATA_LATCH u_DATA_LATCH(.clk(clk), .rst(rst), .start(start), .data(data), .data_q(data_q),.shregforclk(hsync));
-global_counter global_counter_instance(.rst(hsync),.clk(clk),.counter(count));//clk的週期要是大週期的DWIDTH分之一,但沒說是多少, 所以就自由設定
+DATA_LATCH u_DATA_LATCH(.clk(clkfordata), .rst(rst), .start(start), .data(data), .data_q(data_q),.shregforclk(hsync));
+global_counter global_counter_instance(.rst(hsync),.clk(clkforcounter),.counter(count));//clk的週期要是大週期的DWIDTH分之一,但沒說是多少, 所以就自由設定
 genvar i;
 generate
     for(i = 0;i < STAGE;i = i + 1)begin:putpwmblock
