@@ -17,11 +17,11 @@ initial begin
     #50 rst = 1;
     #10 data = 20;
     #5  hsync <= 1 ;
-        rst <= 0;
-    #400 hsync <= 0;
+    #2  rst <= 0;
+    #398 hsync <= 0;
         rst <= 1;
     #1  hsync <= 1;
-        rst <=0;
+    #2  rst <=0;
  //   #5  hsync= 0 ;
  //   #5  hsync = 1;
 end
