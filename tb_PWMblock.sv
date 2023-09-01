@@ -16,12 +16,12 @@ initial begin
     hsync = 0;
     #50 rst = 1;
     #10 data = 20;
-    #5  hsync <= 1 ;
     #2  rst <= 0;
-    #398 hsync <= 0;
+    #3  hsync <= 1 ;
+    #496 hsync <= 0;
         rst <= 1;
-    #1  hsync <= 1;
     #2  rst <=0;
+    #2  hsync <= 1;
  //   #5  hsync= 0 ;
  //   #5  hsync = 1;
 end
