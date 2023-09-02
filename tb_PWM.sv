@@ -2,7 +2,7 @@
 `include "./PWM.sv"
 `define PATH "./pattern.txt"
 `define CLKFORCOUNTER 2.0
-`define CLKFORDATA 66.0
+`define CLKFORDATA 64.0
 module tb_PWM();
 
 reg clkfordata, clkforcounter, rst, start;
