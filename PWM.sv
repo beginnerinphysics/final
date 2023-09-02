@@ -8,9 +8,8 @@ module PWM #(parameter DWIDTH = 8, parameter STAGE = 8)(
     input rst,
     input start,
     input [DWIDTH - 1 : 0] data,
-//    input [DWIDTH-1:0] count,
-//    input hsync,//singal from shreg[8]
-    output reg [0:STAGE-1] out//////////////////////特別說明一下
+
+    output reg [STAGE-1:0] out//////////////////////特別說明一下
 );
 
 wire hsync;

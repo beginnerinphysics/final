@@ -12,6 +12,9 @@ always@(posedge rst or posedge clk)begin//在always block裡面不會有latch,�
  //   else if(!stop)begin//類似mutex
  //       stop[1] <= 1;
 //	end
+	else if(!stop&counter==0)begin
+	    counter <= counter +2;
+	end
 	else if(!stop)begin
 	    counter <= counter +1;
 	end
