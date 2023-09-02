@@ -9,7 +9,6 @@ module PWMblock#(parameter DWIDTH = 8)(
     input hsync,//singal from shreg[8]
     output reg out
 );
-
 wire stop, clr;
 //shreg[8]進來的時候表示counter從0準備開始數(這是counter設定的);而shreg[8]時, 如果pwm讀到的dataq不是0, 就會先把out設成1, 等到clr==1到out才會變成0
 assign stop = ~(|(data ^ count)) ;

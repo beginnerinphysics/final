@@ -14,13 +14,14 @@ reg [7:0] test_data[0:7];
 integer i,a,errornum,input_file;
 
 
-PWM#(.STAGE(8), .DWIDTH(8)) u_PWM(.clkfordata(clkfordata),.clkforcounter(clkforcounter),.rst(rst),.start(start),.data(data),.out(out));
-
+PWM#(.STAGE(8), .DWIDTH(8)) PWMinstance(.clkfordata(clkfordata),.clkforcounter(clkforcounter),.rst(rst),.start(start),.data(data),.out(out));
+/*
 initial begin
     $fsdbDumpfile("DATA_LATCH.fsdb");
 	$fsdbDumpvars;
 	$fsdbDumpMDA;
 end
+*/
 wire [31:0]judge= errornum?"wrong":"right";
 //---------------------------------------------------------------------
 //   CLOCK GENERATION
