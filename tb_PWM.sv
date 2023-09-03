@@ -7,7 +7,7 @@ module tb_PWM();
 
 reg clkfordata, clkforcounter, rst, start;
 reg [7:0] data;
-wire [7:0]out;
+wire [0:7]out;
 
 reg [7:0] test_data[0:7];
 //reg [7:0] test_data;
@@ -72,9 +72,8 @@ initial begin
 		else begin @(negedge clkfordata); data = test_data[i]; end
 	end
     
-    wait(PWMinstance.rstcnt);
-    #CLKFORDATA-CLKFORCOUNTER rst =1 ;
-
+    wait(PWMinstance.hsync);
+    #1
     outtime_init;
     wait(!(out[0]|out[1]|out[2]|out[3]|out[4]|out[5]|out[6]|out[7]));
 $display("it is:%s, out time0 is:%d",judge0 ,outtime0);
