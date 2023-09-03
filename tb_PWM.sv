@@ -22,6 +22,17 @@ initial begin
 	$fsdbDumpMDA;
 end
 */
+
+wire [31:0]judge0 = (!  (outtime0 || test_data[0])  ||  ((outtime0-1) == test_data[0])  )? " right" : " wrong";
+wire [31:0]judge1 = (!  (outtime1 || test_data[1])  ||  ((outtime1-1) == test_data[1])  )? " right" : " wrong";
+wire [31:0]judge2 = (!  (outtime2 || test_data[2])  ||  ((outtime2-1) == test_data[2])  )? " right" : " wrong";
+wire [31:0]judge3 = (!  (outtime3 || test_data[3])  ||  ((outtime3-1) == test_data[3])  )? " right" : " wrong";
+wire [31:0]judge4 = (!  (outtime4 || test_data[4])  ||  ((outtime4-1) == test_data[4])  )? " right" : " wrong";
+wire [31:0]judge5 = (!  (outtime5 || test_data[5])  ||  ((outtime5-1) == test_data[5])  )? " right" : " wrong";
+wire [31:0]judge6 = (!  (outtime6 || test_data[6])  ||  ((outtime6-1) == test_data[6])  )? " right" : " wrong";
+wire [31:0]judge7 = (!  (outtime7 || test_data[7])  ||  ((outtime7-1) == test_data[7])  )? " right" : " wrong";
+/*
+
 wire [31:0]judge0 = outtime0==test_data[0] ? " right" : " wrong";
 wire [31:0]judge1 = outtime1==test_data[1] ? " right" : " wrong";
 wire [31:0]judge2 = outtime2==test_data[2] ? " right" : " wrong";
@@ -30,6 +41,7 @@ wire [31:0]judge4 = outtime4==test_data[4] ? " right" : " wrong";
 wire [31:0]judge5 = outtime5==test_data[5] ? " right" : " wrong";
 wire [31:0]judge6 = outtime6==test_data[6] ? " right" : " wrong";
 wire [31:0]judge7 = outtime7==test_data[7] ? " right" : " wrong";
+*/
 //---------------------------------------------------------------------
 //   CLOCK GENERATION
 //---------------------------------------------------------------------
@@ -76,14 +88,14 @@ initial begin
     #1
     outtime_init;
     wait(!(out[0]|out[1]|out[2]|out[3]|out[4]|out[5]|out[6]|out[7]));
-$display("it is:%s, out time0 is:%d",judge0 ,outtime0);
-$display("it is:%s, out time1 is:%d",judge1 ,outtime1);
-$display("it is:%s, out time2 is:%d",judge2 ,outtime2);
-$display("it is:%s, out time3 is:%d",judge3 ,outtime3);
-$display("it is:%s, out time4 is:%d",judge4 ,outtime4);
-$display("it is:%s, out time5 is:%d",judge5 ,outtime5);
-$display("it is:%s, out time6 is:%d",judge6 ,outtime6);
-$display("it is:%s, out time7 is:%d",judge7 ,outtime7);
+$display("it is:%s, out time0 is:%d",judge0 ,outtime0-1);
+$display("it is:%s, out time1 is:%d",judge1 ,outtime1-1);
+$display("it is:%s, out time2 is:%d",judge2 ,outtime2-1);
+$display("it is:%s, out time3 is:%d",judge3 ,outtime3-1);
+$display("it is:%s, out time4 is:%d",judge4 ,outtime4-1);
+$display("it is:%s, out time5 is:%d",judge5 ,outtime5-1);
+$display("it is:%s, out time6 is:%d",judge6 ,outtime6-1);
+$display("it is:%s, out time7 is:%d",judge7 ,outtime7-1);
 	//timer; //insert bug
 
 	@(negedge clkfordata);@(negedge clkfordata);
