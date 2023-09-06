@@ -9,7 +9,7 @@ reg clkfordata, clkforcounter, rst, start;
 reg [7:0] data;
 wire [0:7]out;
 
-reg [7:0] test_data[0:7];
+reg [7:0] test_data[0:15];//number of data load
 //reg [7:0] test_data;
 integer i,a,outtime0,outtime1,outtime2,outtime3,outtime4,outtime5,outtime6,outtime7,input_file;
 
@@ -63,7 +63,7 @@ initial begin
 	#1 rst = 0;
 //readfile
 	input_file = $fopen(`PATH,"r");
-    for(int q=0;q<8;q++) begin
+    for(int q=0;q<16;q++) begin//number of data load to memory
         a = $fscanf(input_file, "%h",test_data[q]);
     end
 	force clkforcounter = 0 ;force clkfordata =0;
@@ -78,7 +78,7 @@ initial begin
 
 
 
-	for(i=0;i<8;i=i+1)begin// already merge the above negedge inside this
+	for(i=0;i<16;i=i+1)begin// memory to circuit
 		if(i==0)begin @(negedge clkfordata); start = 1; data = test_data[i]; end
 		else if(i==1)begin @(negedge clkfordata); start = 0; data = test_data[i]; end
 		else begin @(negedge clkfordata); data = test_data[i]; end
@@ -97,6 +97,7 @@ $display("it is: %s, out time4 is:%d",judge4 ,outtime4);
 $display("it is: %s, out time5 is:%d",judge5 ,outtime5);
 $display("it is: %s, out time6 is:%d",judge6 ,outtime6);
 $display("it is: %s, out time7 is:%d",judge7 ,outtime7);
+	
 	//timer; //insert bug
 
 	@(negedge clkfordata);@(negedge clkfordata);
