@@ -37,18 +37,6 @@ generate
                 data_q[i] <= data;
             end
         end
-/*
-        always@(posedge shreg[STAGE] or posedge rst)begin
-            if(rst)begin
-                data_q[i] <= 'b0;
-            end
-            else begin
-                data_q[i] <=data_in[i];
-            end
-        end
- */
     end
 endgenerate
-
-
 endmodule

@@ -9,10 +9,10 @@ reg clkfordata, clkforcounter, rst, start;
 reg [7:0] data;
 wire [0:7]out;
 
-reg [7:0] test_data[0:15];//number of data load
+reg [7:0] test_data[0:7];//number of data load
 //reg [7:0] test_data;
 integer i,a,outtime0,outtime1,outtime2,outtime3,outtime4,outtime5,outtime6,outtime7,input_file;
-
+reg [7:0] test_data_first[0:7];
 
 PWM#(.STAGE(8), .DWIDTH(8)) PWMinstance(.clkfordata(clkfordata),.clkforcounter(clkforcounter),.rst(rst),.start(start),.data(data),.out(out));
 /*
@@ -23,6 +23,20 @@ initial begin
 end
 */
 
+
+
+
+wire [40:0]firstjudge0 = (!  (outtime0 || test_data_first[0])  ||  ((outtime0) == test_data_first[0])  )? " right" : " wrong";
+wire [40:0]firstjudge1 = (!  (outtime1 || test_data_first[1])  ||  ((outtime1) == test_data_first[1])  )? " right" : " wrong";
+wire [40:0]firstjudge2 = (!  (outtime2 || test_data_first[2])  ||  ((outtime2) == test_data_first[2])  )? " right" : " wrong";
+wire [40:0]firstjudge3 = (!  (outtime3 || test_data_first[3])  ||  ((outtime3) == test_data_first[3])  )? " right" : " wrong";
+wire [40:0]firstjudge4 = (!  (outtime4 || test_data_first[4])  ||  ((outtime4) == test_data_first[4])  )? " right" : " wrong";
+wire [40:0]firstjudge5 = (!  (outtime5 || test_data_first[5])  ||  ((outtime5) == test_data_first[5])  )? " right" : " wrong";
+wire [40:0]firstjudge6 = (!  (outtime6 || test_data_first[6])  ||  ((outtime6) == test_data_first[6])  )? " right" : " wrong";
+wire [40:0]firstjudge7 = (!  (outtime7 || test_data_first[7])  ||  ((outtime7) == test_data_first[7])  )? " right" : " wrong";
+
+
+
 wire [40:0]judge0 = (!  (outtime0 || test_data[0])  ||  ((outtime0) == test_data[0])  )? " right" : " wrong";
 wire [40:0]judge1 = (!  (outtime1 || test_data[1])  ||  ((outtime1) == test_data[1])  )? " right" : " wrong";
 wire [40:0]judge2 = (!  (outtime2 || test_data[2])  ||  ((outtime2) == test_data[2])  )? " right" : " wrong";
@@ -32,7 +46,6 @@ wire [40:0]judge5 = (!  (outtime5 || test_data[5])  ||  ((outtime5) == test_data
 wire [40:0]judge6 = (!  (outtime6 || test_data[6])  ||  ((outtime6) == test_data[6])  )? " right" : " wrong";
 wire [40:0]judge7 = (!  (outtime7 || test_data[7])  ||  ((outtime7) == test_data[7])  )? " right" : " wrong";
 /*
-
 wire [31:0]judge0 = outtime0==test_data[0] ? " right" : " wrong";
 wire [31:0]judge1 = outtime1==test_data[1] ? " right" : " wrong";
 wire [31:0]judge2 = outtime2==test_data[2] ? " right" : " wrong";
@@ -63,13 +76,12 @@ initial begin
 	#1 rst = 0;
 //readfile
 	input_file = $fopen(`PATH,"r");
-    for(int q=0;q<16;q++) begin//number of data load to memory
+    for(int q=0;q<8;q++) begin//number of data load to memory
         a = $fscanf(input_file, "%h",test_data[q]);
     end
 	force clkforcounter = 0 ;force clkfordata =0;
 	reset_signal_task;
 	release clkforcounter; release clkfordata; 
-
 
 	//force data_q[3] = 0; //insert bug
 
@@ -78,12 +90,45 @@ initial begin
 
 
 
-	for(i=0;i<16;i=i+1)begin// memory to circuit
+	for(i=0;i<8;i=i+1)begin// memory to circuit
 		if(i==0)begin @(negedge clkfordata); start = 1; data = test_data[i]; end
 		else if(i==1)begin @(negedge clkfordata); start = 0; data = test_data[i]; end
 		else begin @(negedge clkfordata); data = test_data[i]; end
 	end
     
+    wait(PWMinstance.hsync);
+    #1
+
+    test_data_first[7]<=test_data[7];
+    test_data_first[6]<=test_data[6];
+    test_data_first[5]<=test_data[5];
+    test_data_first[4]<=test_data[4];
+    test_data_first[3]<=test_data[3];
+    test_data_first[2]<=test_data[2];
+    test_data_first[1]<=test_data[1];
+    test_data_first[0]<=test_data[0];
+    for(int q=0;q<8;q++) begin//number of data load to memory
+    a = $fscanf(input_file, "%h",test_data[q]);
+    end
+    //
+    outtime_init;
+   fork
+    wait(!(out[0]|out[1]|out[2]|out[3]|out[4]|out[5]|out[6]|out[7]));
+   	for(i=0;i<8;i=i+1)begin// memory to circuit
+        @(negedge clkfordata); data = test_data[i]; 
+    end
+   join
+$display("it is: %s, out time0 is:%d",firstjudge0 ,outtime0);
+$display("it is: %s, out time1 is:%d",firstjudge1 ,outtime1);
+$display("it is: %s, out time2 is:%d",firstjudge2 ,outtime2);
+$display("it is: %s, out time3 is:%d",firstjudge3 ,outtime3);
+$display("it is: %s, out time4 is:%d",firstjudge4 ,outtime4);
+$display("it is: %s, out time5 is:%d",firstjudge5 ,outtime5);
+$display("it is: %s, out time6 is:%d",firstjudge6 ,outtime6);
+$display("it is: %s, out time7 is:%d",firstjudge7 ,outtime7);
+
+    
+	//timer; //insert bug
     wait(PWMinstance.hsync);
     #1
     outtime_init;
@@ -98,7 +143,6 @@ $display("it is: %s, out time5 is:%d",judge5 ,outtime5);
 $display("it is: %s, out time6 is:%d",judge6 ,outtime6);
 $display("it is: %s, out time7 is:%d",judge7 ,outtime7);
 	
-	//timer; //insert bug
 
 	@(negedge clkfordata);@(negedge clkfordata);
 	$fclose(input_file);
@@ -136,15 +180,7 @@ task outtime_init;
         outtime5 = 0;
         outtime6 = 0;
         outtime7 = 0;
- /*       if (out[0] == 1) outtime0 = outtime0 + 1;
-        if (out[1] == 1) outtime1 = outtime1 + 1;
-        if (out[2] == 1) outtime2 = outtime2 + 1;
-        if (out[3] == 1) outtime3 = outtime3 + 1;
-        if (out[4] == 1) outtime4 = outtime4 + 1;
-        if (out[5] == 1) outtime5 = outtime5 + 1;
-        if (out[6] == 1) outtime6 = outtime6 + 1;
-        if (out[7] == 1) outtime7 = outtime7 + 1;
-   */
+
     end
 
 endtask
@@ -156,16 +192,4 @@ endtask
 
 
 endmodule
-/*
-module countouttime(
-input start,
-input clk,
-input checktheout,
-output outtime
-);
-reg [8:0]counter;
-always@(posedge start or posedge clk)begin
-if(start
 
-endmodule
-*/
