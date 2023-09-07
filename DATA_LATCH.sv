@@ -16,12 +16,12 @@ always@(posedge clk or posedge rst)begin
     if(rst)begin
         shreg <= 'b0;
     end
-    else if(shreg != 9'b100000000) begin
+    else if(shreg != 9'b0100_0000_0) begin
         shreg <= {shreg[STAGE-1:0],start};
     end
     else begin
         shreg[0] <= 1 ;
-        shreg[8] <= 0 ;
+        shreg[8] <= 1 ;
     end
 end
 genvar i;

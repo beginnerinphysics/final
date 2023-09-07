@@ -91,14 +91,16 @@ initial begin
 
 
 	for(i=0;i<8;i=i+1)begin// memory to circuit
-		if(i==0)begin @(negedge clkfordata); start = 1; data = test_data[i]; end
-		else if(i==1)begin @(negedge clkfordata); start = 0; data = test_data[i]; end
-		else begin @(negedge clkfordata); data = test_data[i]; end
+		if(i==0)begin @(negedge clkfordata); start = 1; data = test_data[i];test_data_first[i]=data;    a = $fscanf(input_file, "%h",test_data[i]);end
+		else if(i==1)begin @(negedge clkfordata); start = 0; data = test_data[i];test_data_first[i]=data;     a = $fscanf(input_file, "%h",test_data[i]);end
+		else begin @(negedge clkfordata); data = test_data[i];  test_data_first[i]=data;   a = $fscanf(input_file, "%h",test_data[i]);end
 	end
-    
-    wait(PWMinstance.hsync);
-    #1
+//    wait(negedge clkfordata);
 
+//    wait(PWMinstance.hsync);
+//    #1
+    outtime_init;
+/*
     test_data_first[7]<=test_data[7];
     test_data_first[6]<=test_data[6];
     test_data_first[5]<=test_data[5];
@@ -110,12 +112,18 @@ initial begin
     for(int q=0;q<8;q++) begin//number of data load to memory
     a = $fscanf(input_file, "%h",test_data[q]);
     end
+*/
     //
-    outtime_init;
-   fork
-    wait(!(out[0]|out[1]|out[2]|out[3]|out[4]|out[5]|out[6]|out[7]));
+ //   outtime_init;
+    fork
+    begin 
+        wait(PWMinstance.hsync);
+        #1
+        outtime_init;
+        wait(!(out[0]|out[1]|out[2]|out[3]|out[4]|out[5]|out[6]|out[7]));
+   	end
    	for(i=0;i<8;i=i+1)begin// memory to circuit
-        @(negedge clkfordata); data = test_data[i]; 
+        @(negedge clkfordata);data = test_data[i];
     end
    join
 $display("it is: %s, out time0 is:%d",firstjudge0 ,outtime0);

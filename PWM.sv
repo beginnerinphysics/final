@@ -18,7 +18,7 @@ wire [DWIDTH - 1 : 0] data_q [0 : STAGE -1];
 wire rstcnt;
 
 DATA_LATCH DATA_LOADER(.clk(clkfordata), .rst(rst), .start(start), .data(data), .data_q(data_q),.shregforclk(hsync),.resetforcounter(rstcnt));
-global_counter counter_instance(.rst(rstcnt),.clk(clkforcounter),.counter(count));//clk的週期要是大週期的DWIDTH分之一,但沒說是多少, 所以就自由設定
+global_counter counter_instance(.start(hsync),.clk(clkforcounter),.counter(count));//clk的週期要是大週期的DWIDTH分之一,但沒說是多少, 所以就自由設定
 
 genvar i;
 generate
